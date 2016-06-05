@@ -1,0 +1,3 @@
+/*
+A budget is both a limit and a category
+*/

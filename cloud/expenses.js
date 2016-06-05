@@ -1,0 +1,3 @@
+/*
+    An expense is money given to someone. It lists as 
+*/

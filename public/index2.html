@@ -1,0 +1,151 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+
+  <title>My Parse App</title>
+  <meta name="description" content="My Parse App">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
+
+<body>
+
+  <div id="main">
+    <h1>You're ready to use Parse!</h1>
+
+    <p>Read the documentation and start building your JavaScript app:</p>
+
+    <ul>
+      <li><a href="https://www.parse.com/docs/js_guide">Parse JavaScript Guide</a></li>
+      <li><a href="https://www.parse.com/docs/js">Parse JavaScript API Documentation</a></li>
+    </ul>
+
+    <div style="display:none" class="error">
+      Looks like there was a problem saving the test object. Make sure you've set your application ID and javascript key correctly in the call to <code>Parse.initialize</code> in this file.
+    </div>
+
+    <div style="display:none" class="success">
+      <p>We've also just created your first object using the following code:</p>
+
+        <code>
+          var TestObject = Parse.Object.extend("TestObject");<br/>
+          var testObject = new TestObject();<br/>
+          testObject.save({foo: "bar"});
+        </code>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    Parse.initialize("mattico-finanny");
+    Parse.serverURL = 'http://localhost:1337/parse'
+
+
+    /*var TestObject = Parse.Object.extend("TestObject");
+    var testObject = new TestObject();
+      testObject.save({foo: "bar"}, {
+      success: function(object) {
+        $(".success").show();
+      },
+      error: function(model, error) {
+        $(".error").show();
+      }
+  });*/
+  /*var GameScore = Parse.Object.extend("GameScore");
+  var gameScore = new GameScore();
+
+    gameScore.set("score", 1337);
+    gameScore.set("playerName", "Sean Plott");
+    gameScore.set("cheatMode", false);
+    gameScore.set("playerAge", 20);
+
+    gameScore.save(null, {
+      success: function(gameScore) {
+        // Execute any logic that should take place after the object is saved.
+        alert('New object created with objectId: ' + gameScore.id);
+      },
+      error: function(gameScore, error) {
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and message.
+        alert('Failed to create new object, with error code: ' + error.message);
+      }
+    });
+
+     var query = new Parse.Query(GameScore);
+     query.greaterThan("playerAge", 18);
+     query.find({
+       success: function(results) {
+         alert("Successfully retrieved " + results.length + " scores.");
+         // Do something with the returned Parse.Object values
+         for (var i = 0; i < results.length; i++) {
+           var object = results[i];
+           alert(object.id + ' - ' + object.get('playerName'));
+         }
+       },
+       error: function(error) {
+         alert("Error: " + error.code + " " + error.message);
+       }
+   });*/
+   var currentUser = Parse.User.current();
+    if (currentUser) {
+        console.log(currentUser);
+        console.log(currentUser.get("username"));
+        alert("Logged in");
+    }
+    else {
+        // show the signup or login page
+        Parse.User.logIn("myname", "mypass", {
+          success: function(user) {
+            alert("LOGGED IN");
+          },
+          error: function(user, error) {
+            // The login failed. Check error to see why.
+            alert("Unable to log in");
+            var user = new Parse.User();
+
+             user.set("username", "myname");
+             user.set("password", "mypass");
+             user.set("email", "email@example.com");
+
+             // other fields can be set just like with Parse.Object
+             user.set("phone", "415-392-0202");
+
+             user.signUp(null, {
+               success: function(user) {
+                 // Hooray! Let them use the app now.
+                 alert("Registered to use it!");
+               },
+               error: function(user, error) {
+                 // Show the error message somewhere and let the user try again.
+                 alert("Error: " + error.code + " " + error.message);
+                }
+              }
+            );
+        }});
+}
+   /*var user = new Parse.User();
+
+    user.set("username", "my name");
+    user.set("password", "my pass");
+    user.set("email", "email@example.com");
+
+    // other fields can be set just like with Parse.Object
+    user.set("phone", "415-392-0202");
+
+    user.signUp(null, {
+      success: function(user) {
+        // Hooray! Let them use the app now.
+      },
+      error: function(user, error) {
+        // Show the error message somewhere and let the user try again.
+        alert("Error: " + error.code + " " + error.message);
+    }
+});*/
+
+
+  </script>
+</body>
+
+</html>
