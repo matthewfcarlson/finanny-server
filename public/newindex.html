@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+	<head>
+		<title>Finanny</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+        <script src="https://use.fontawesome.com/69e589cdc2.js"></script>
+
+		<style>
+
+@media screen and (min-width: 737px){
+    body {
+        width: 100%;
+        min-width: 1000px;
+        min-height: 100%;
+        /* overflow-y: scroll; */
+        background-attachment: fixed;
+        font-size: 14pt;
+        line-height: 1.75em;
+    }
+}
+body {
+    background-image: url("images/overlay.png"), url("images/bg.jpg");
+    background-repeat: repeat, no-repeat;
+    background-repeat-x: repeat, no-repeat;
+    background-repeat-y: repeat, no-repeat;
+    background-size: auto, 100% 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    color: #777777;
+}
+#nav{
+    text-align: center;
+    height: 4.25em;
+    cursor: default;
+    padding-top: 10px;
+
+}
+#nav a
+{
+    color: white;
+    padding:1em;
+    outline: 0;
+    opacity: .5;
+    transition: opacity .25s ease-in-out;
+    position:relative;
+
+    margin: 0 0.25em 0 0.25em;
+}
+#nav a.active
+{
+    opacity:1;
+}
+#nav a:after{
+    border-bottom-width: 0.5em;
+}
+#nav a.active:after
+{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: -0.75em;
+    margin-left: -0.5em;
+    border-bottom: solid 0em #ffffff;
+    border-left: solid 0.5em transparent;
+    border-right: solid 0.5em transparent;
+    -moz-transition: border-bottom-width .25s ease-in-out;
+    -webkit-transition: border-bottom-width .25s ease-in-out;
+    -ms-transition: border-bottom-width .25s ease-in-out;
+    transition: border-bottom-width .25s ease-in-out;
+}
+
+#nav a span
+{
+    display:none;
+    background:black;
+    color:white;
+    top: -2.75em;
+
+    height: 2.25em;
+    line-height: 2.25em;
+    left: 50%;
+}
+#nav a:hover span
+{
+    display:block;
+    position:absolute;
+    top:0;
+}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <nav id="nav">
+                <a href="#home" class="icon active"><i class='fa fa-home fa-3x'></i><span>Home</span></a>
+                <a href="#spending" class="icon"><i class='fa fa-credit-card fa-3x'></i><span>Expenses</span></a>
+                <a href="#contact" class="icon"><i class='fa fa-line-chart fa-3x'></i><span>Trends</span></a>
+                <a href="#" class="icon "><i class='fa fa-twitter fa-3x'></i><span>Twitter</span></a>
+            </nav>
+        </div>
+    </body>
+
+</html>
