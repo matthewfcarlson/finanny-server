@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Parse Serve example</title>
+    <!-- Latest compiled and minified CSS -->
+
+    <script src="/public/assets/js/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/public/assets/css/main.css" />
+  </head>
+
+  <body>
+      <div class="container">
+          <!-- Main -->
+          <h2>Transactions <small class='pull-right' id='userID'>Welcome, Matthew</small></h2>
+          <hr/>
+          <div class='col-md-6 col-md-6-offset'>
+              <div class="form-group">
+                  <label for="trans_category">Category</label>
+                  <select id='trans_category' class='form-control' type='email' placeholder='Email Address Login'>
+                    <option>Restaurant</option>
+                    <option>Rent</option>
+                    <option>N/a</option>
+                  </select>
+              </div>
+             <div class="form-group">
+                  <label for="trans_cost">Cost</label>
+                  <input id='trans_cost' class='form-control' type='number' placeholder='$0.00'/>
+              </div>
+              <button class='btn btn-block' onclick='attemptNewTrans(this)'> Add </button>
+          </div>
+          <ul class="list-group col-md-6" id='transactionsList'></ul>
+    </div>
+
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <script type="text/javascript">
+        Parse.initialize("mattico-finanny");
+        Parse.serverURL = 'http://localhost:1337/parse'
+        var currentUser = Parse.User.current();
+
+        var Transaction = Parse.Object.extend("Transaction");
+
+
+      if (currentUser) {
+           console.log(currentUser);
+           console.log(currentUser.get("username"));
+           $('#userID').text("Welcome, "+currentUser.get("username"));
+           //alert("Logged in");
+
+       }
+       else
+       {
+           alert("Not logged in!");
+           $('.btn').remove();
+       }
+
+       $(loadTrans);
+
+       function loadTrans()
+       {
+           if (!currentUser) return;
+           $('#transactionsList').html('<li class="list-group-item">Loading...</li>');
+
+           var query = new Parse.Query(Transaction);
+            query.equalTo("spender", currentUser);
+            query.find({
+              success: function(results) {
+                    $('#transactionsList').html('');
+                    //alert("Successfully retrieved " + results.length + " transaactions.");
+                    // Do something with the returned Parse.Object values
+                    for (var i = 0; i < results.length; i++) {
+                        var object = results[i];
+                        $('#transactionsList').append("<li class='list-group-item'>$"+object.get('cost')+" <small class='pull-right'>"+object.get('category')+"</small></li>");
+                        //alert(object.id + ' - ' + object.get('cost'));
+                    }
+              },
+              error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+              }
+            });
+       }
+
+
+
+       function attemptNewTrans(btn)
+       {
+           var transaction = new Transaction();
+
+           var cost = $('#trans_cost').val();
+           var category = $('#trans_category').val();
+
+           transaction.set("cost", cost);
+           transaction.set("spender", currentUser);
+           transaction.set("category", category);
+
+           $('#transactionsList').append("<li class='list-group-item'>$"+transaction.get('cost')+" <small class='pull-right'>"+transaction.get('category')+"</small></li>");
+
+           transaction.save(null, {
+              success: function(gameScore) {
+                // Execute any logic that should take place after the object is saved.
+                alert('New object created with objectId: ' + gameScore.id);
+
+              },
+              error: function(gameScore, error) {
+                // Execute any logic that should take place if the save fails.
+                // error is a Parse.Error with an error code and message.
+                alert('Failed to create new object, with error code: ' + error.message);
+              }
+            });
+
+
+
+       }
+
+
+
+     </script>
+  </body>
+</html>
+<script>
+
+</script>
