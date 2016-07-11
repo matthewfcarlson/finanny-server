@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+	<head>
+		<title>Finanny</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+        <script src="https://use.fontawesome.com/69e589cdc2.js"></script>
+        <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+		<style>
+
+@media screen and (min-width: 737px){
+    body {
+        width: 100%;
+        min-width: 1000px;
+        min-height: 100%;
+        /* overflow-y: scroll; */
+        background-attachment: fixed;
+        font-size: 14pt;
+        line-height: 1.75em;
+    }
+}
+body {
+    background-image: url("images/overlay.png"), url("images/bg.jpg");
+    background-repeat: repeat, no-repeat;
+    background-repeat-x: repeat, no-repeat;
+    background-repeat-y: repeat, no-repeat;
+    background-size: auto, 100% 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    font-size: 15pt;
+    color: #777777;
+    min-height:100%;
+    width:100%;
+}
+#nav{
+    text-align: center;
+    height: 4.25em;
+    cursor: default;
+    padding-top: 1em;
+
+}
+#nav a.icon
+{
+    color: white;
+    padding:1em;
+    outline: 0;
+    opacity: .5;
+    transition: opacity .25s ease-in-out;
+    position:relative;
+    height:3em;
+    width:3em;
+
+    margin: 0 0.25em 0 0.25em;
+}
+#nav a.active.icon
+{
+    opacity:1;
+}
+#nav a.icon:after
+{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: -0.1em;
+    margin-left: -0.75em;
+    border-bottom: solid 0em #ffffff;
+    border-left: solid 0.75em transparent;
+    border-right: solid 0.75em transparent;
+    -moz-transition: border-bottom-width .25s ease-in-out;
+    -webkit-transition: border-bottom-width .25s ease-in-out;
+    -ms-transition: border-bottom-width .25s ease-in-out;
+    transition: border-bottom-width .25s ease-in-out;
+}
+#nav a.active:after{
+    border-bottom-width: 0.75em;
+}
+
+#nav a.icon span
+{
+    display:none;
+    background:black;
+    color:white;
+    top: -2.75em;
+
+    height: 2.25em;
+    line-height: 2.25em;
+    left: 50%;
+}
+#nav a.icon i.fa
+{
+    font-size:2.5em;
+}
+#nav a.icon:hover span
+{
+    display:block;
+    position:absolute;
+    top:0;
+}
+.window{
+    -moz-transition: height .25s ease-in-out;
+    -webkit-transition: height .25s ease-in-out;
+    -ms-transition: height .25s ease-in-out;
+    transition: height .25s ease-in-out;
+    margin-bottom:1em;
+    background:white;
+    min-height:500px;
+    padding:1em;
+}
+.content{
+
+
+}
+footer{
+    text-align:center;
+}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <nav id="nav">
+                <a href="#login" class="">Finanny</a>
+                <a href="#home" class="icon"><i class='fa fa-home fa-fw'></i><span>Home</span></a>
+                <a href="#spending" class="icon"><i class='fa fa-credit-card fa-fw'></i><span>Expenses</span></a>
+                <a href="#trends" class="icon"><i class='fa fa-line-chart fa-fw'></i><span>Trends</span></a>
+                <a href="#testing" class="icon "><i class='fa fa-twitter fa-fw'></i><span>Twitter</span></a>
+                <a href="#profile" class="">Welcome Matthew</a>
+            </nav>
+            <div class='window'>
+                <pane class='row'>
+                    <h1 class='text-center'>Loading...</h1>
+                </pane>
+                <pane class='row hidden' data-pane='login'>
+                    <div class='col-lg-8' style='border-right:1px solid gray;min-height:300pt'>
+                        <p>Finanny is a world leading cutting edge budget tracking tool.
+                    </div>
+                    <div class='col-lg-4'>
+                        <form>
+                            <div class="form-group">
+                                <label for="user_email">Email address</label>
+                                <input type="email" class="form-control user_input" id="user_email" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="user_password">Password</label>
+                                <input type="password" class="form-control user_input" id="user_password" placeholder="Password">
+                            </div>
+                            <button type="submit" class="btn btn-success user_input" onclick='userRegister()'>Register</button>
+                            <button type="submit" class="btn btn-default user_input" onclick='userLogin()'>Login</button>
+                        </form>
+                    </div>
+
+                </pane>
+                <pane class='row hidden' data-pane='home'>
+                    <h2>Transactions</h2>
+                    <hr/>
+                    <div class='col-md-6 col-md-6-offset'>
+                        <div class="form-group">
+                            <label for="trans_category">Category</label>
+                            <select id='trans_category' class='form-control' type='email' placeholder='Email Address Login'>
+                              <option>Restaurant</option>
+                              <option>Rent</option>
+                              <option>N/a</option>
+                            </select>
+                        </div>
+                       <div class="form-group">
+                            <label for="trans_cost">Cost</label>
+                            <input id='trans_cost' class='form-control' type='number' placeholder='$0.00'/>
+                        </div>
+                        <button class='btn btn-block' onclick='attemptNewTrans(this)'> Add </button>
+                    </div>
+                    <ul class="list-group col-md-6" id='transactionsList'></ul>
+
+                </pane>
+            </div>
+
+            <footer>
+                (c) Mattico 2016.
+            </footer>
+        </div>
+
+    </body>
+
+</html>
+<script type="text/javascript">
+  Parse.initialize("mattico-finanny");
+  Parse.serverURL = 'http://localhost:1337/parse'
+var currentUser = Parse.User.current();
+if (currentUser) {
+   console.log(currentUser);
+   console.log(currentUser.get("username"));
+   console.log("Logged in");
+   $("pane[data-pane=login]").remove();
+   loadPane("home");
+}
+else{
+    console.log("Please login");
+}
+$(function()
+{
+    $("nav>a").click(function(){
+        loadPane($(this).attr('href').slice(1));
+    });
+})
+function loadPane(id)
+{
+    console.log(id);
+    $("nav>a").removeClass('active');
+    $("nav a[href='#"+id+"']").addClass('active');
+    $('pane').addClass('hidden');
+    var newpane = $('pane[data-pane='+id+']');
+    newpane.removeClass('hidden');
+
+    var loadingfunction = "loadPane"+id;
+    if (typeof window[loadingfunction] === "function") {
+        // celebrate
+        window[loadingfunction](newpane); //To call the function dynamically!
+    }
+
+}
+
+
+function loadPanehome(pane)
+{
+    //pane.html("TEsting testing testing");
+    var Transaction = Parse.Object.extend("Transaction");
+    $('#transactionsList').html('<li class="list-group-item">Loading...</li>');
+
+    var query = new Parse.Query(Transaction);
+     query.equalTo("spender", currentUser);
+     query.find({
+       success: function(results) {
+             $('#transactionsList').html('');
+             //alert("Successfully retrieved " + results.length + " transaactions.");
+             // Do something with the returned Parse.Object values
+             for (var i = 0; i < results.length; i++) {
+                 var object = results[i];
+                 $('#transactionsList').append("<li class='list-group-item'>$"+object.get('cost')+" <small class='pull-right'>"+object.get('category')+"</small></li>");
+                 //alert(object.id + ' - ' + object.get('cost'));
+             }
+       },
+       error: function(error) {
+         alert("Error: " + error.code + " " + error.message);
+       }
+     });
+}
+
+function userLogin()
+{
+    var email = $("#user_email").val();
+    var password = $("#user_password").val();
+    $(".user_input.btn").button("thinking");
+    Parse.User.logIn(email, password, {
+      success: function(user) {
+          alert("LOGGED IN");
+          $(".user_input.btn").button("reset");
+      },
+      error: function(user, error) {
+          alert("Unable to login");
+          $(".user_input.btn").button("reset");
+      }
+  });
+}
+function userRegister()
+{
+    var email = $("#user_email").val();
+    var password = $("#user_password").val();
+}
+</script>

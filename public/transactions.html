@@ -19,7 +19,7 @@
   <body>
       <div class="container">
           <!-- Main -->
-          <h2>Transactions</h2>
+          <h2>Transactions <small class='pull-right' id='userID'>Welcome, Matthew</small></h2>
           <hr/>
           <div class='col-md-6 col-md-6-offset'>
               <div class="form-group">
@@ -51,6 +51,7 @@
       if (currentUser) {
            console.log(currentUser);
            console.log(currentUser.get("username"));
+           $('#userID').text("Welcome, "+currentUser.get("username"));
            //alert("Logged in");
 
        }
@@ -64,6 +65,7 @@
 
        function loadTrans()
        {
+           if (!currentUser) return;
            $('#transactionsList').html('<li class="list-group-item">Loading...</li>');
 
            var query = new Parse.Query(Transaction);
