@@ -35,7 +35,7 @@
     }
 }
 body {
-    background-image: url("images/overlay.png"), url("images/bg.jpg");
+    background-image: url("/public/images/overlay.png"), url("/public/images/bg.jpg");
     background-repeat: repeat, no-repeat;
     background-repeat-x: repeat, no-repeat;
     background-repeat-y: repeat, no-repeat;
@@ -129,6 +129,11 @@ body {
 footer{
     text-align:center;
 }
+#userField{
+    text-decoration: none;
+    font-size:.75em;
+
+}
         </style>
     </head>
     <body>
@@ -139,7 +144,7 @@ footer{
                 <a href="#spending" class="icon"><i class='fa fa-credit-card fa-fw'></i><span>Expenses</span></a>
                 <a href="#trends" class="icon"><i class='fa fa-line-chart fa-fw'></i><span>Trends</span></a>
                 <a href="#testing" class="icon "><i class='fa fa-twitter fa-fw'></i><span>Twitter</span></a>
-                <a href="#profile" class="">Welcome Matthew</a>
+                <a href="#profile" id='userField' class="">Please Login</a>
             </nav>
             <div class='window'>
                 <pane class='row'>
@@ -171,18 +176,29 @@ footer{
                     <div class='col-md-6 col-md-6-offset'>
                         <div class="form-group">
                             <label for="trans_category">Category</label>
-                            <select id='trans_category' class='form-control' type='email' placeholder='Email Address Login'>
+                            <select id='trans_category' class='form-control'>
+                                <option disabled>Select a Category</option>
                               <option>Restaurant</option>
+                              <option>Groceries</option>
+                              <option>Shopping</option>
+                              <option>Gas</option>
+                              <option>Entertainment</option>
                               <option>Rent</option>
-                              <option>N/a</option>
+                              <option>N/A</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                             <label for="trans_vendor">Vendor</label>
+                             <input id='trans_vendor' class='form-control' type='text' placeholder='Vendor'/>
+                         </div>
                        <div class="form-group">
                             <label for="trans_cost">Cost</label>
                             <input id='trans_cost' class='form-control' type='number' placeholder='$0.00'/>
                         </div>
+
                         <button class='btn btn-block' onclick='attemptNewTrans(this)'> Add </button>
                     </div>
+                    <br/>
                     <ul class="list-group col-md-6" id='transactionsList'></ul>
 
                 </pane>
@@ -199,25 +215,34 @@ footer{
 <script type="text/javascript">
   Parse.initialize("mattico-finanny");
   Parse.serverURL = 'http://localhost:1337/parse'
+
+
+  var Transaction = Parse.Object.extend("Transaction");
+
+
 var currentUser = Parse.User.current();
 if (currentUser) {
    console.log(currentUser);
-   console.log(currentUser.get("username"));
+   console.log(currentUser.get("name"));
    console.log("Logged in");
-   $("pane[data-pane=login]").remove();
+   userLoggedIn();
    loadPane("home");
 }
 else{
     console.log("Please login");
+    currentUser = false;
+    loadPane('login');
 }
 $(function()
 {
     $("nav>a").click(function(){
         loadPane($(this).attr('href').slice(1));
     });
-})
+
+});
 function loadPane(id)
 {
+    if (!currentUser) id = 'login';
     console.log(id);
     $("nav>a").removeClass('active');
     $("nav a[href='#"+id+"']").addClass('active');
@@ -233,11 +258,11 @@ function loadPane(id)
 
 }
 
-
 function loadPanehome(pane)
 {
     //pane.html("TEsting testing testing");
-    var Transaction = Parse.Object.extend("Transaction");
+    //var Transaction;
+    //console.log(Transaction);
     $('#transactionsList').html('<li class="list-group-item">Loading...</li>');
 
     var query = new Parse.Query(Transaction);
@@ -249,7 +274,7 @@ function loadPanehome(pane)
              // Do something with the returned Parse.Object values
              for (var i = 0; i < results.length; i++) {
                  var object = results[i];
-                 $('#transactionsList').append("<li class='list-group-item'>$"+object.get('cost')+" <small class='pull-right'>"+object.get('category')+"</small></li>");
+                 $('#transactionsList').append("<li class='list-group-item'>$"+object.get('cost')+" <small class='pull-right'>"+object.get('category')+"</small><small>"+object.get('createdAt')+"</small></li>");
                  //alert(object.id + ' - ' + object.get('cost'));
              }
        },
@@ -257,6 +282,41 @@ function loadPanehome(pane)
          alert("Error: " + error.code + " " + error.message);
        }
      });
+}
+
+function attemptNewTrans(btn)
+{
+    var transaction = new Transaction();
+
+    var cost = $('#trans_cost').val();
+    var category = $('#trans_category').val();
+    var vendor = $('#trans_vendor').val();
+
+    transaction.set("cost", cost);
+    transaction.set("spender", currentUser);
+    transaction.set("category", category);
+    transaction.set("vendor", vendor);
+
+    $('#transactionsList').append("<li class='list-group-item'>$"+transaction.get('cost')+" <small class='pull-right'>"+transaction.get('category')+"</small></li>");
+
+    transaction.save(null, {
+       success: function(gameScore) {
+           $('#trans_cost').val('');
+           $('#trans_category').val('');
+           $('#trans_vendor').val('');
+         // Execute any logic that should take place after the object is saved.
+         //alert('New object created with objectId: ' + gameScore.id);
+
+       },
+       error: function(gameScore, error) {
+         // Execute any logic that should take place if the save fails.
+         // error is a Parse.Error with an error code and message.
+         alert('Failed to create new object, with error code: ' + error.message);
+       }
+     });
+
+
+
 }
 
 function userLogin()
@@ -268,6 +328,8 @@ function userLogin()
       success: function(user) {
           alert("LOGGED IN");
           $(".user_input.btn").button("reset");
+          currentUser = user;
+          userLoggedIn();
       },
       error: function(user, error) {
           alert("Unable to login");
@@ -279,5 +341,16 @@ function userRegister()
 {
     var email = $("#user_email").val();
     var password = $("#user_password").val();
+}
+
+function userLogout()
+{
+    Parse.User.logOut();
+}
+
+function userLoggedIn()
+{
+    $("pane[data-pane=login]").remove();
+    $('#userField').text(currentUser.get("name"));
 }
 </script>
