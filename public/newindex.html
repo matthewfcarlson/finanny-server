@@ -214,7 +214,10 @@ footer{
 </html>
 <script type="text/javascript">
   Parse.initialize("mattico-finanny");
-  Parse.serverURL = 'http://localhost:1337/parse'
+  var port = window.location.port;
+  var url = window.location.protocol + '//' + window.location.hostname + '/parse';
+  
+  Parse.serverURL = url;
 
 
   var Transaction = Parse.Object.extend("Transaction");
