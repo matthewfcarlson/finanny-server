@@ -155,7 +155,7 @@ footer{
                         <p>Finanny is a world leading cutting edge budget tracking tool.
                     </div>
                     <div class='col-lg-4'>
-                        <form>
+                        <section>
                             <div class="form-group">
                                 <label for="user_email">Email address</label>
                                 <input type="email" class="form-control user_input" id="user_email" placeholder="Email">
@@ -166,7 +166,7 @@ footer{
                             </div>
                             <button type="submit" class="btn btn-success user_input" onclick='userRegister()'>Register</button>
                             <button type="submit" class="btn btn-default user_input" onclick='userLogin()'>Login</button>
-                        </form>
+                        </section>
                     </div>
 
                 </pane>
@@ -216,7 +216,7 @@ footer{
   Parse.initialize("mattico-finanny");
   var port = window.location.port;
   var url = window.location.protocol + '//' + window.location.hostname + '/parse';
-  
+
   Parse.serverURL = url;
 
 
