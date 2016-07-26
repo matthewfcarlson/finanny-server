@@ -171,6 +171,10 @@ footer{
 
                 </pane>
                 <pane class='row hidden' data-pane='home'>
+                    <h2>The Carlson Household</h2>
+
+                </pane>
+                <pane class='row hidden' data-pane='spending'>
                     <h2>Transactions</h2>
                     <hr/>
                     <div class='col-md-6 col-md-6-offset'>
@@ -205,7 +209,7 @@ footer{
             </div>
 
             <footer>
-                (c) Mattico 2016.
+                (c) Mattico 2016. All Rights Reserved v.0.1
             </footer>
         </div>
 
@@ -215,8 +219,8 @@ footer{
 <script type="text/javascript">
   Parse.initialize("mattico-finanny");
   var port = window.location.port;
-  var url = window.location.protocol + '//' + window.location.hostname + '/parse';
-
+  var url = window.location.protocol + '//' + window.location.hostname +':'+port+ '/parse';
+  //alert(url);
   Parse.serverURL = url;
 
 
@@ -229,7 +233,7 @@ if (currentUser) {
    console.log(currentUser.get("name"));
    console.log("Logged in");
    userLoggedIn();
-   loadPane("home");
+
 }
 else{
     console.log("Please login");
@@ -262,6 +266,32 @@ function loadPane(id)
 }
 
 function loadPanehome(pane)
+{
+    //pane.html("TEsting testing testing");
+    //var Transaction;
+    //console.log(Transaction);
+    $('#transactionsList').html('<li class="list-group-item">Loading...</li>');
+
+    var query = new Parse.Query(Transaction);
+     query.equalTo("spender", currentUser);
+     query.find({
+       success: function(results) {
+             $('#transactionsList').html('');
+             //alert("Successfully retrieved " + results.length + " transaactions.");
+             // Do something with the returned Parse.Object values
+             for (var i = 0; i < results.length; i++) {
+                 var object = results[i];
+                 $('#transactionsList').append("<li class='list-group-item'>$"+object.get('cost')+" <small class='pull-right'>"+object.get('category')+"</small><small>"+object.get('createdAt')+"</small></li>");
+                 //alert(object.id + ' - ' + object.get('cost'));
+             }
+       },
+       error: function(error) {
+         alert("Error: " + error.code + " " + error.message);
+       }
+     });
+}
+
+function loadPanespending(pane)
 {
     //pane.html("TEsting testing testing");
     //var Transaction;
@@ -329,13 +359,14 @@ function userLogin()
     $(".user_input.btn").button("thinking");
     Parse.User.logIn(email, password, {
       success: function(user) {
-          alert("LOGGED IN");
+          console.log("LOGGED IN");
           $(".user_input.btn").button("reset");
           currentUser = user;
           userLoggedIn();
       },
       error: function(user, error) {
-          alert("Unable to login");
+          console.log("Unable to login");
+          $("#user_password").val('');
           $(".user_input.btn").button("reset");
       }
   });
@@ -355,5 +386,6 @@ function userLoggedIn()
 {
     $("pane[data-pane=login]").remove();
     $('#userField').text(currentUser.get("name"));
+    loadPane("home");
 }
 </script>
