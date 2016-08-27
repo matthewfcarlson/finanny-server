@@ -134,18 +134,29 @@ footer{
     font-size:.75em;
 
 }
+.top-logo{
+	width:200pt;
+	display:inline-block;
+}
         </style>
     </head>
     <body>
         <div class="container">
-            <nav id="nav">
-                <a href="#login" class="">Finanny</a>
-                <a href="#home" class="icon"><i class='fa fa-home fa-fw'></i><span>Home</span></a>
-                <a href="#spending" class="icon"><i class='fa fa-credit-card fa-fw'></i><span>Expenses</span></a>
-                <a href="#trends" class="icon"><i class='fa fa-line-chart fa-fw'></i><span>Trends</span></a>
-                <a href="#testing" class="icon "><i class='fa fa-twitter fa-fw'></i><span>Twitter</span></a>
-                <a href="#profile" id='userField' class="">Please Login</a>
-            </nav>
+			<div class='row'>
+				<a href="#login" class="col-lg-2"><img src='/public/images/newlogo.png' width='100%'/></a>
+
+				<nav id="nav" class='col-lg-8'>
+					<a class="icon">&nbsp;</a>
+					<a href="#home" class="icon"><i class='fa fa-home fa-fw'></i><span>Home</span></a>
+					<a href="#spending" class="icon"><i class='fa fa-credit-card fa-fw'></i><span>Expenses</span></a>
+					<a href="#trends" class="icon"><i class='fa fa-line-chart fa-fw'></i><span>Trends</span></a>
+					<a href="#testing" class="icon "><i class='fa fa-twitter fa-fw'></i><span>Twitter</span></a>
+
+				</nav>
+				<a href="#profile" class="col-lg-2" id='userField'> Please Login</a>
+			</div>
+
+
             <div class='window'>
                 <pane class='row'>
                     <h1 class='text-center'>Loading...</h1>
