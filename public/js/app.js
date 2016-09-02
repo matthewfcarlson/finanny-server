@@ -22,6 +22,7 @@
 
 var React = require('react');
 var Parse = require('parse');
+var ReactDOM = require('react-dom');
 
 // Insert your app's keys here:
 //Parse.initialize('APPLICATION_ID', 'JAVASCRIPT_KEY');
@@ -32,12 +33,14 @@ var url = window.location.protocol + '//' + window.location.hostname +':'+port+ 
 Parse.serverURL = url;
 
 
+
 var LoginWrapper = require('./LoginWrapper.react.js');
 $(function(){
-React.render(
+    console.log(Parse.serverURL);
+/*React.render(
   <LoginWrapper />,
   document.getElementById('app')
-);
+);*/
 });
 
 String.prototype.hashCode = function(){

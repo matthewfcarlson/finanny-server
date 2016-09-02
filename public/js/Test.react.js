@@ -22,18 +22,7 @@
 
 var React = require('react');
 
-var Start = require('./Test.react.js');
-/*var Overview = require('./Overview.react.js');
-var Expenses = require('./Expenses.react.js');
-var Sidebar = require('./Sidebar.react.js');*/
-
-var contents = [
-  //<Overview />,
-  <Start />,
-  <Start />,
-];
-
-var AppWrapper = React.createClass({
+var Test = React.createClass({
   getInitialState: function() {
     return {
       currentTab: 0
@@ -43,22 +32,7 @@ var AppWrapper = React.createClass({
   render: function() {
     return (
       <div>
-        <div className='menu'>
-          <a
-            className={this.state.currentTab === 0 ? 'selected' : ''}
-            onClick={this.selectTab.bind(this, 0)}>
-            Overview
-          </a>
-          <a
-            className={this.state.currentTab === 1 ? 'selected' : ''}
-            onClick={this.selectTab.bind(this, 1)}>
-            Expenses
-          </a>
-        </div>
-        <Sidebar />
-        <div className='mainPanel'>
-          {contents[this.state.currentTab]}
-        </div>
+        <span>I am special</span>
       </div>
     );
   },
@@ -68,4 +42,4 @@ var AppWrapper = React.createClass({
   }
 });
 
-module.exports = AppWrapper;
+module.exports = Test;

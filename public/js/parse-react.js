@@ -121,7 +121,7 @@ process.umask = function() { return 0; };
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 /**
@@ -213,7 +213,7 @@ module.exports = Delta;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
@@ -278,7 +278,7 @@ module.exports = Id;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 /**
@@ -343,7 +343,7 @@ var currentUser = {
 
   update: function update(changes) {
     var _this2 = this;
-
+    console.log("Updating User");
     Parse.User.currentAsync().then(function (current) {
       if (current !== null) {
         for (var attr in changes) {
@@ -395,7 +395,7 @@ module.exports = LocalSubscriptions;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
@@ -555,7 +555,7 @@ module.exports = Mixin;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
@@ -852,7 +852,7 @@ module.exports = {
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
@@ -965,7 +965,7 @@ module.exports = MutationBatch;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
@@ -1181,7 +1181,7 @@ if (typeof process !== 'undefined' && "development" === 'test') {
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
@@ -1866,6 +1866,7 @@ var patches = {
     });
   },
   logIn: function logIn(options) {
+    console.log("Logging into query interface");
     return oldLogIn.call(this, options).then(function () {
       LocalSubscriptions.currentUser.update();
     });
@@ -1889,7 +1890,7 @@ var ParsePatches = {
     if (!Parse.Object.prototype.toPlainObject) {
       Parse.Object.prototype.toPlainObject = patches.toPlainObject;
     }
-    if (!Parse.Query.prototype.subscribe) {
+    if (!Parse.Query.prototype.subscribe || true) {
       Parse.Query.prototype.subscribe = patches.subscribe;
     }
     if (!Parse.Query.prototype.observeOne) {
@@ -1952,7 +1953,7 @@ module.exports = ParsePatches;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 /**
@@ -2321,7 +2322,7 @@ if (typeof Parse === 'undefined') {
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
@@ -2589,7 +2590,7 @@ module.exports = Subscription;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 // Mapping of query hashes to subscriptions
@@ -2749,7 +2750,7 @@ module.exports = SubscriptionManager;
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  *
- *  
+ *
  */
 
 'use strict';
