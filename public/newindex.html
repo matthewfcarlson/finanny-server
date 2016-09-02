@@ -138,28 +138,40 @@ footer{
 	width:200pt;
 	display:inline-block;
 }
+
+.progress-bar-text{
+	color: black;
+    float: left;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+}
+
         </style>
     </head>
     <body>
         <div class="container">
 			<div class='row'>
-				<a href="#login" class="col-lg-2"><img src='/public/images/newlogo.png' width='100%'/></a>
+				<a href="#login" class="col-lg-2" style='display:block'><img src='/public/images/newlogo.png' width='100%'/></a>
 
 				<nav id="nav" class='col-lg-8'>
 					<a class="icon">&nbsp;</a>
 					<a href="#home" class="icon"><i class='fa fa-home fa-fw'></i><span>Home</span></a>
 					<a href="#spending" class="icon"><i class='fa fa-credit-card fa-fw'></i><span>Expenses</span></a>
 					<a href="#trends" class="icon"><i class='fa fa-line-chart fa-fw'></i><span>Trends</span></a>
-					<a href="#testing" class="icon "><i class='fa fa-twitter fa-fw'></i><span>Twitter</span></a>
+					<a href="#trips" class="icon "><i class='fa fa-suitcase fa-fw'></i><span>Trips</span></a>
 
 				</nav>
-				<a href="#profile" class="col-lg-2" id='userField'> Please Login</a>
+				<a href="#profile" class="col-lg-2 text-center" style='display:block' id='userField'> Please Login</a>
 			</div>
 
 
             <div class='window'>
                 <pane class='row'>
                     <h1 class='text-center'>Loading...</h1>
+                </pane>
+				<pane class='row hidden' data-pane='error'>
+                    <h1 class='text-center'>Error!</h1>
                 </pane>
                 <pane class='row hidden' data-pane='login'>
                     <div class='col-lg-8' style='border-right:1px solid gray;min-height:300pt'>
@@ -183,6 +195,49 @@ footer{
                 </pane>
                 <pane class='row hidden' data-pane='home'>
                     <h2>The Carlson Household</h2>
+					<h3>Expenses</h3>
+					<div class='col-lg-6'>
+						<div class='row'>
+							<div class='col-lg-1'>
+								<i class='fa-cutlery fa fa-lg fa-circular'></i>
+							</div>
+							<div class='col-lg-11'>
+								<div class="progress ">
+								  <div class="progress-bar progress-bar-success" style="width: 35%">
+								    <span class="">$135 spent</span>
+								  </div>
+								  <div class="progress-bar progress-bar-danger" style="width: 10%">
+								    <span class="">$50 over</span>
+								  </div>
+
+									  <span class='progress-bar-text' style='color:black'>&nbsp;$60 left</span>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="progress">
+						<i class='fa-cutlery fa fa-circular'></i>
+					  <div class="progress-bar progress-bar-success" style="width: 35%">
+					    <span class="sr-only">35% Complete (success)</span>
+					  </div>
+					  <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 20%">
+					    <span class="sr-only">20% Complete (warning)</span>
+					  </div>
+					  <div class="progress-bar progress-bar-danger" style="width: 10%">
+					    <span class="sr-only">10% Complete (danger)</span>
+					  </div>
+					</div>
+
+					<i class='fa fa-shopping-basket'>Groceries</i>
+					<i class='fa fa-shopping-bag'>Shopping</i>
+					<i class='fa fa-car'>Gas</i>
+					<i class='fa-bed fa'>Restaraunt</i>
+					<i class='fa-stethoscope fa'>Medical</i>
+					<i class='fa-ticket fa'>Entertainment</i>
+					<i class='fa-question fa'>N/A</i>
+
 
                 </pane>
                 <pane class='row hidden' data-pane='spending'>
@@ -205,16 +260,27 @@ footer{
                         <div class="form-group">
                              <label for="trans_vendor">Vendor</label>
                              <input id='trans_vendor' class='form-control' type='text' placeholder='Vendor'/>
-                         </div>
-                       <div class="form-group">
-                            <label for="trans_cost">Cost</label>
-                            <input id='trans_cost' class='form-control' type='number' placeholder='$0.00'/>
+                        </div>
+						<div class="form-group">
+						    <label for="trans_cost">Cost</label>
+						    <input id='trans_cost' class='form-control' type='number' placeholder='$0.00'/>
+						</div>
+						<div class="form-group">
+                             <label for="trans_what">On What</label>
+                             <input id='trans_what' class='form-control' type='text' placeholder='Description'/>
+                    	</div>
+						<div class="form-group">
+                             <label for="trans_spentOn">When</label>
+                             <input id='trans_spentOn' class='form-control' type='date' placeholder='When it was purchased'/>
                         </div>
 
-                        <button class='btn btn-block' onclick='attemptNewTrans(this)'> Add </button>
+						<button class='btn btn-block' onclick='attemptNewTrans(this)'> Add </button>
+
                     </div>
                     <br/>
                     <ul class="list-group col-md-6" id='transactionsList'></ul>
+
+
 
                 </pane>
             </div>
@@ -237,6 +303,12 @@ footer{
 
   var Transaction = Parse.Object.extend("Transaction");
 
+  Date.prototype.toDateInputValue = (function() {
+      var local = new Date(this);
+      local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+      return local.toJSON().slice(0,10);
+  });
+
 
 var currentUser = Parse.User.current();
 if (currentUser) {
@@ -244,6 +316,13 @@ if (currentUser) {
    console.log(currentUser.get("name"));
    console.log("Logged in");
    userLoggedIn();
+   if (window.location.hash){
+	   id = window.location.hash.substring(1);
+	   loadPane(id);
+   }
+   else{
+	   loadPane("home");
+   }
 
 }
 else{
@@ -261,11 +340,17 @@ $(function()
 function loadPane(id)
 {
     if (!currentUser) id = 'login';
-    console.log(id);
+
+	console.log(id);
+
     $("nav>a").removeClass('active');
     $("nav a[href='#"+id+"']").addClass('active');
     $('pane').addClass('hidden');
     var newpane = $('pane[data-pane='+id+']');
+	if (newpane.length == 0)
+	{
+		newpane = $('pane[data-pane=error]');
+	}
     newpane.removeClass('hidden');
 
     var loadingfunction = "loadPane"+id;
@@ -278,29 +363,38 @@ function loadPane(id)
 
 function loadPanehome(pane)
 {
-    //pane.html("TEsting testing testing");
-    //var Transaction;
-    //console.log(Transaction);
-    $('#transactionsList').html('<li class="list-group-item">Loading...</li>');
+	var query = new Parse.Query(Transaction);
+    query.equalTo("spender", currentUser);
+	var d = new Date();
+	var daysPast = d.getDate();
+	var time = (daysPast * 24 * 3600 * 1000);
+	var expirationDate = new Date(d.getTime() - time);
+	query.greaterThanOrEqualTo("spentOn", expirationDate );
 
-    var query = new Parse.Query(Transaction);
-     query.equalTo("spender", currentUser);
-     query.find({
-       success: function(results) {
-             $('#transactionsList').html('');
-             //alert("Successfully retrieved " + results.length + " transaactions.");
-             // Do something with the returned Parse.Object values
-             for (var i = 0; i < results.length; i++) {
-                 var object = results[i];
-                 $('#transactionsList').append("<li class='list-group-item'>$"+object.get('cost')+" <small class='pull-right'>"+object.get('category')+"</small><small>"+object.get('createdAt')+"</small></li>");
-                 //alert(object.id + ' - ' + object.get('cost'));
-             }
-       },
-       error: function(error) {
-         alert("Error: " + error.code + " " + error.message);
-       }
-     });
+	var spendingByCategory = {};
+
+	query.each(
+	    function(result){
+	        spent = Number(result.get("cost"));
+			if(result.get("category") in spendingByCategory){
+ 				spendingByCategory[result.get("category")] += spent;
+			}
+			else {
+				spendingByCategory[result.get("category")] = spent;
+			}
+	    }, {
+	        success: function() {
+	            // looped through everything
+				console.log(spendingByCategory);
+	        },
+	        error: function(error) {
+	            // error is an instance of Parse.Error.
+				console.log(error);
+	        }
+    });
+
 }
+
 
 function loadPanespending(pane)
 {
@@ -310,6 +404,14 @@ function loadPanespending(pane)
     $('#transactionsList').html('<li class="list-group-item">Loading...</li>');
 
     var query = new Parse.Query(Transaction);
+	var d = new Date();
+
+	$('#trans_spentOn').val(d.toDateInputValue());
+
+	var daysPast = d.getDate();
+	var time = (daysPast * 24 * 3600 * 1000);
+	var expirationDate = new Date(d.getTime() - time);
+	query.greaterThanOrEqualTo("createdAt", expirationDate );
      query.equalTo("spender", currentUser);
      query.find({
        success: function(results) {
@@ -374,6 +476,7 @@ function userLogin()
           $(".user_input.btn").button("reset");
           currentUser = user;
           userLoggedIn();
+		  loadPane("home");
       },
       error: function(user, error) {
           console.log("Unable to login");
@@ -397,6 +500,5 @@ function userLoggedIn()
 {
     $("pane[data-pane=login]").remove();
     $('#userField').text(currentUser.get("name"));
-    loadPane("home");
 }
 </script>
