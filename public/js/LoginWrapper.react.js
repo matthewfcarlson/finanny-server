@@ -21,7 +21,7 @@
  */
 
 var React = require('react');
-var Parse = require('parse');
+var Parse = require('parse').Parse;
 var ParseReact = require('parse-react');
 
 var AppWrapper = require('./AppWrapper.react.js');
@@ -32,16 +32,22 @@ var LoginWrapper = React.createClass({
   getInitialState: function() {
     return {
       error: null,
-      signup: false
+      signup: false,
+      thinking:false,
     };
   },
 
   observe: function(props,state) {
-      console.log(props);
-      console.log(state);
     return {
       current_user: ParseReact.currentUser
     };
+  },
+
+  renderUsername: function() {
+    // this works, and updates correctly
+    if(this.data.user){
+      return(this.data.current_user.username)
+    }
   },
 
   render: function() {
@@ -78,10 +84,15 @@ var LoginWrapper = React.createClass({
             <input ref='password' id='password' type='password' />
           </div>
           <div className='row centered'>
-            <a className='button' onClick={this.submit}>
-              {this.state.signup ? 'Sign up' : 'Log in'}
-            </a>
+            {this.state.thinking ?
+                <i className='fa fa-spin fa-gear fa-2x'></i>:
+                <a className='button' onClick={this.submit}>
+                {this.state.signup ? 'Sign up' : 'Log in'}
+                </a>
+
+            }
           </div>
+
           <div className='row centered'>
             or&nbsp;
             <a onClick={this.toggleSignup}>
@@ -98,6 +109,9 @@ var LoginWrapper = React.createClass({
     var username = React.findDOMNode(this.refs.username).value;
     var password = React.findDOMNode(this.refs.password).value;//.hashCode();
     if (username.length && password.length) {
+        self.setState({
+          thinking: true
+        });
       if (this.state.signup) {
         var u = new Parse.User({
           username: username,
@@ -105,11 +119,13 @@ var LoginWrapper = React.createClass({
         });
         u.signUp().then(function() {
           self.setState({
-            error: null
+            error: null,
+            thinking:false,
           });
         }, function() {
           self.setState({
-            error: 'Invalid account information'
+            error: 'Invalid account information',
+            thinking:false,
           });
         });
       } else {
@@ -118,11 +134,13 @@ var LoginWrapper = React.createClass({
             console.log(Parse.CoreManager.getUserController());
           self.setState({
             error: null,
+            thinking:false,
             //user: us,
           });
         }, function() {
           self.setState({
             error: 'Incorrect username or password',
+            thinking:false,
             //user: null
           });
         });
